@@ -302,6 +302,7 @@
 		[].forEach.call(document.querySelectorAll('.tracy-panel'), function(panel) {
 			Debug.getPanel(panel.id).init();
 		});
+		document.getElementById('tracy-debug').style.display = 'block';
 	};
 
 	Debug.getPanel = function(id) {

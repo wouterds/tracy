@@ -1,4 +1,4 @@
-<!DOCTYPE html><link rel="stylesheet" href="assets/style.css">
+<!DOCTYPE html><meta charset=utf-8><link rel="stylesheet" href="assets/style.css">
 
 <style> html { background: url(assets/arrow.png) no-repeat bottom right; height: 100%; } </style>
 

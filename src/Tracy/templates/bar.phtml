@@ -24,20 +24,11 @@ use Tracy;
 
 <!-- Tracy Debug Bar -->
 
-<?php ob_start() ?>
-&nbsp;
-
 <style id="tracy-debug-style" class="tracy-debug">
-<?php readfile(__DIR__ . '/bar.css') ?>
-<?php readfile(__DIR__ . '/dumper.css') ?>
+<?php echo preg_replace('#[\r\n\t ]+#', ' ', file_get_contents(__DIR__ . '/bar.css') . file_get_contents(__DIR__ . '/dumper.css')) ?>
 </style>
 
-<script id="tracy-debug-script">
-<?php readfile(__DIR__ . '/bar.js') ?>
-<?php readfile(__DIR__ . '/dumper.js') ?>
-</script>
-
-
+<div id="tracy-debug">
 <?php foreach ($panels as $panel): if (!$panel['panel']) continue; ?>
 	<div class="tracy-panel" id="tracy-debug-panel-<?php echo $panel['id'] ?>">
 		<?php echo $panel['panel'] ?>
@@ -58,25 +49,19 @@ use Tracy;
 		<li><a href="#" rel="close" title="close debug bar">&times;</a></li>
 	</ul>
 </div>
-<?php $output = ob_get_clean(); ?>
+</div>
 
-
-<script>
+<script id="tracy-debug-script">
 (function() {
 	if (!document.documentElement.classList) {
 		document.write('<div style="position:fixed;right:0;bottom:0;z-index:30000;font:normal normal 12px/21px sans-serif;color:#333;background:#EDEAE0;border:1px solid #ccc;padding:.2em">Warning: Tracy requires IE 10+<\/div>');
 		return;
 	}
 
-	window.addEventListener('load', function() {
-		var debug = document.body.appendChild(document.createElement('div'));
-		debug.id = 'tracy-debug';
-		debug.innerHTML = <?php echo json_encode(Helpers::fixEncoding($output)) ?>;
-		for (var i = 0, scripts = debug.getElementsByTagName('script'); i < scripts.length; i++) eval(scripts[i].innerHTML);
-		Tracy.Dumper.init(<?php echo json_encode(Dumper::fetchLiveData()) ?>);
-		Tracy.Debug.init();
-		debug.style.display = 'block';
-	});
+	<?php echo preg_replace(array('#//.*#', '#[\r\n\t ]+#'), ' ', file_get_contents(__DIR__ . '/bar.js') . file_get_contents(__DIR__ . '/dumper.js')) ?>
+
+	Tracy.Dumper.init(<?php echo json_encode(Dumper::fetchLiveData()) ?>);
+	Tracy.Debug.init();
 })();
 </script>
 
